@@ -10,10 +10,10 @@ import EventPage from "./pages/events/EventsPage.tsx";
 import NewEventPage from "./pages/events/EventNewPage.tsx";
 import EventDetailsPage from "./pages/events/EventEditPage.tsx";
 import NewCandidate from "./pages/candidates/CandidateNewPage.tsx";
-import CandidatesPage from "./pages/candidates/CandidatesPage.tsx";
 import EditCandidatePage from "./pages/candidates/CandidatesEditPage.tsx";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import SignIn from "./auth/Login.tsx";
+import CandidatesList from "./components/candidatesList/CandidateList.tsx";
 import ProtectedRoute from "./components/routes/ProtectedRoute.tsx"; // Import the ProtectedRoute component
 
 const router = createBrowserRouter(
@@ -33,7 +33,7 @@ const router = createBrowserRouter(
         />
         <Route
           path="events/:eventId/candidates"
-          element={<ProtectedRoute element={CandidatesPage} />}
+          element={<ProtectedRoute element={CandidatesList} />}
         />
         <Route
           path="events/:eventId/candidates/new"

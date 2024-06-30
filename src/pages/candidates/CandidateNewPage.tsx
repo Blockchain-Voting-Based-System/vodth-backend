@@ -4,7 +4,7 @@ import { collection, addDoc, getDoc, doc } from "firebase/firestore";
 import { eventStorage, firestore } from "../../firebase";
 import { getDownloadURL } from "firebase/storage";
 import { ref, uploadBytes } from "firebase/storage";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { NewCandidate } from "../../utils/newCandidate";
 import { useRef } from "react";
 
@@ -14,6 +14,7 @@ const NewCandidatePage = () => {
   useEffect(() => {
     getEvent(eventId);
   }, []);
+  const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [suiEventId, setSuiEventId] = useState();
@@ -359,9 +360,7 @@ const NewCandidatePage = () => {
               </div>
               <div className="mt-4 flex justify-end col-span-5 space-x-4">
                 <button
-                  onClick={() => {
-                    window.location.href = `/events/${eventId}`;
-                  }}
+                  onClick={() => navigate(`/events/${eventId}/candidates`)}
                   type="button"
                   className="inline-block w-full rounded-lg bg-red-500 px-5 py-3 font-medium text-white sm:w-auto"
                 >

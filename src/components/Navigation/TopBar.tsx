@@ -2,6 +2,7 @@
 import React from "react";
 import { useUser } from "../../auth/UserContext";
 
+import { InputText } from "primereact/inputtext";
 const Topbar: React.FC = () => {
   const { user } = useUser();
   return (
@@ -11,13 +12,20 @@ const Topbar: React.FC = () => {
           <i className="fas fa-bars"></i>
         </button>
       </div>
-      <div className="flex items-center">
-        <button className="text-gray-500 focus:outline-none mx-4">
-          <i className="fas fa-search"></i>
-        </button>
-        <button className="text-gray-500 focus:outline-none mx-4">
-          <i className="fas fa-bell"></i>
-        </button>
+      <div className="flex items-center space-x-4">
+        <div className="relative flex items-center">
+          <InputText
+            type="text"
+            placeholder="Search..."
+            className="pl-10 pr-2 py-2 border border-gray-300 rounded"
+          />
+          <i className="fas fa-search absolute left-3 text-gray-500"></i>
+        </div>
+        <div className="relative flex items-center">
+          <button className="text-gray-500">
+            <i className="fas fa-bell "></i>
+          </button>
+        </div>
         {user && (
           <div className="flex flex-col items-center px-4 py-2">
             <img
