@@ -2,19 +2,16 @@
 import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { eventStorage, firestore } from "../../firebase";
-import { ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { EventFormType } from "../../utils/formType";
-import { loadAccounts } from "../../utils/sui";
 import { NewEvent } from "../../utils/newEvent";
-import { AccountData } from "../../utils/suiType";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 const NewEventPage = () => {
+  const [disabled, setDisabled] = useState(false);
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const accounts = useRef<AccountData[]>(loadAccounts());
-  const account = accounts.current[0];
   const [formState, setFormState] = useState<EventFormType>({
     name: "",
     type: "",
@@ -51,15 +48,16 @@ const NewEventPage = () => {
   const uploadImage = async () => {
     let result = {
       status: false,
-      image_name: "",
+      imageUrl: "",
     };
     if (image != null) {
       const imageName = image.name;
       const ImageRef = ref(eventStorage, `events/${imageName}`);
       await uploadBytes(ImageRef, image)
-        .then(() => {
+        .then(async () => {
+          const imageUrl = await getDownloadURL(ImageRef);
           result.status = true;
-          result.image_name = imageName;
+          result.imageUrl = imageUrl;
         })
         .catch((e) => {
           console.log(e);
@@ -69,20 +67,21 @@ const NewEventPage = () => {
   };
 
   const createEvent = async (e: any): Promise<void> => {
+    setDisabled(true);
     e.preventDefault();
     const eventCollection = collection(firestore, "events");
-    const suiEvent = await NewEvent(account).catch((e) => {
+    const suiEvent = await NewEvent().catch((e) => {
       alert("Error creating event");
       console.log(e);
     });
-    const imageUpload = await uploadImage().catch((e) => {
+    const imageUpload = await uploadImage().catch(() => {
       alert("Error uploading image");
     });
     if (imageUpload?.status == true && suiEvent?.success == true) {
       const event = {
         ...formState,
-        image_name: imageUpload.image_name,
-        event_id: suiEvent?.event_id,
+        imageUrl: imageUpload.imageUrl,
+        suiEventId: suiEvent?.suiEventId,
       };
       await addDoc(eventCollection, event)
         .then((result) => {
@@ -93,6 +92,7 @@ const NewEventPage = () => {
           alert("Error creating event");
         });
     }
+    setDisabled(false);
   };
 
   return (
@@ -165,14 +165,24 @@ const NewEventPage = () => {
                 </div>
               </div>
               <div className="col-span-3">
-                <div className="my-2 p-2">Event Image</div>
+                <div className="my-2 p-2 flex space-x-4">
+                  <p>Event Image</p>
+                  {imagePreviewUrl && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        fileInputRef.current?.click();
+                      }}
+                      className="text-blue-500"
+                    >
+                      Change
+                    </button>
+                  )}
+                </div>
                 <div>
                   <div className="flex items-center justify-center">
                     <div
                       className={`border-2 border-dashed border-gray-40 text-center bg-white rounded-lg max-w-md w-full cursor-pointer ${!imagePreviewUrl && "p-24"}`}
-                      onClick={() => {
-                        fileInputRef.current?.click();
-                      }}
                       style={{ height: "292px" }}
                     >
                       {imagePreviewUrl ? (
@@ -181,15 +191,20 @@ const NewEventPage = () => {
                           style={{ maxHeight: "400px", height: "100%" }}
                           src={imagePreviewUrl}
                           alt=""
-                          onClick={() => {
-                            fileInputRef.current?.click();
-                          }}
                         />
                       ) : (
                         <div>
                           <p className="text-lg mb-2">
                             <strong>Add & Drop</strong> or{" "}
-                            <span className="text-blue-500">Browse</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                fileInputRef.current?.click();
+                              }}
+                              className="text-blue-500"
+                            >
+                              Browse
+                            </button>
                           </p>
                           <p className="text-sm text-gray-600">
                             We currently support JPG, JPEG, PNG and make sure
@@ -263,9 +278,10 @@ const NewEventPage = () => {
                   Cancel
                 </button>
                 <button
+                  disabled={disabled}
                   onClick={createEvent}
                   type="submit"
-                  className="inline-block w-full rounded-lg bg-black px-5 py-3 font-medium text-white sm:w-auto"
+                  className="inline-block w-full rounded-lg bg-black px-5 py-3 font-medium text-white sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Create Event
                 </button>

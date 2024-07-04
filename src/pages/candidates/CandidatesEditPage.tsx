@@ -1,29 +1,25 @@
 // import CsvUploader from "../../components/csv/CsvUploader";
 import { useState, useEffect } from "react";
-import { collection, addDoc, getDoc, doc } from "firebase/firestore";
+import { getDoc, doc, updateDoc } from "firebase/firestore";
 import { eventStorage, firestore } from "../../firebase";
 import { getDownloadURL } from "firebase/storage";
 import { ref, uploadBytes } from "firebase/storage";
 import { useParams } from "react-router-dom";
-import { NewCandidate } from "../../utils/newCandidate";
 import { useRef } from "react";
 
-const NewCandidatePage = () => {
+const EditCandidatePage = () => {
+  const params = useParams();
   const [disabled, setDisabled] = useState(false);
-  const { eventId } = useParams();
   useEffect(() => {
-    getEvent(eventId);
+    getCandidate(params);
   }, []);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [suiEventId, setSuiEventId] = useState();
+  // const [suiEvent, setSuiEvent] = useState();
   const [formState, setFormState] = useState({
     name: "",
     birthday: new Date(),
     bio: "",
-    suiCandidateId: "",
-    eventId: eventId,
-    suiEventId: "",
     status: "",
     sex: "",
     imageUrl: "",
@@ -31,6 +27,23 @@ const NewCandidatePage = () => {
   const [image, setImage] = useState<File>();
 
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
+
+  async function getCandidate(params: any) {
+    const docRef = doc(firestore, "candidates", params.candidateId);
+    const candidate = await getDoc(docRef);
+    if (candidate.exists()) {
+      const candidateForm: any = {
+        name: candidate.data().name,
+        birthday: candidate.data().birthday,
+        bio: candidate.data().bio,
+        imageUrl: candidate.data().iamgeUrl,
+        sex: candidate.data().sex,
+        status: candidate.data().status,
+      };
+      setImagePreviewUrl(candidate.data().imageUrl);
+      setFormState(candidateForm);
+    }
+  }
 
   const handleInputChange = (event: any) => {
     setFormState({
@@ -80,53 +93,38 @@ const NewCandidatePage = () => {
           console.log(e);
         });
     }
+    if (image == null) {
+      result.status = true;
+      result.imageUrl = imagePreviewUrl;
+    }
     return result;
   };
 
-  const createCandidate = async (e: any) => {
-    e.preventDefault();
+  const updateCandidate = async (e: any) => {
     setDisabled(true);
-    if (suiEventId == null) {
-      alert("Please select an event");
-      return;
-    }
-    const candidateCollections = collection(firestore, "candidates");
+    e.preventDefault();
     const imageUpload = await uploadImage().catch(() => {
       alert("Error uploading image");
     });
     if (imageUpload?.status == true) {
-      const suiCandidate = await NewCandidate(suiEventId).catch((e) => {
-        alert("Error creating Candidate");
-        console.log(e);
-      });
-      if (suiCandidate?.success == true) {
-        const candidate = {
-          ...formState,
-          imageUrl: imageUpload.imageUrl,
-          suiCandidateId: suiCandidate?.suiCandidateId,
-          eventId: eventId,
-          suiEventId: suiEventId,
-        };
-        await addDoc(candidateCollections, candidate)
-          .then((candidate) => {
-            alert("Candidate created successfully");
-            window.location.href = `/events/${eventId}/candidates/${candidate.id}/edit`;
+      const candidate = {
+        ...formState,
+        imageUrl: imageUpload.imageUrl,
+      };
+
+      if (params.candidateId) {
+        const docRef = doc(firestore, "candidates", params.candidateId);
+        await updateDoc(docRef, candidate)
+          .then(() => {
+            alert("Candidate updated successfully");
           })
           .catch(() => {
-            alert("Error creating event");
+            alert("Candidate update failed");
           });
       }
     }
     setDisabled(false);
   };
-
-  async function getEvent(param: any) {
-    const docRef = doc(firestore, "events", param);
-    const event = await getDoc(docRef);
-    if (event.exists()) {
-      setSuiEventId(event.data().suiEventId);
-    }
-  }
 
   return (
     <>
@@ -167,6 +165,7 @@ const NewCandidatePage = () => {
                       tabIndex={0}
                     >
                       <input
+                        checked={formState.sex == "Male"}
                         required
                         className="sr-only"
                         id="Male"
@@ -188,6 +187,7 @@ const NewCandidatePage = () => {
                       tabIndex={0}
                     >
                       <input
+                        checked={formState.sex == "Female"}
                         required
                         className="sr-only"
                         id="Female"
@@ -208,6 +208,7 @@ const NewCandidatePage = () => {
                       tabIndex={0}
                     >
                       <input
+                        checked={formState.sex == "Other"}
                         required
                         className="sr-only"
                         id="Other"
@@ -248,7 +249,7 @@ const NewCandidatePage = () => {
                           <img
                             className="w-full rounded-lg"
                             src={imagePreviewUrl}
-                            alt="candidate profile picture"
+                            alt=""
                           />
                         ) : (
                           <div>
@@ -291,6 +292,7 @@ const NewCandidatePage = () => {
                         tabIndex={0}
                       >
                         <input
+                          checked={formState.status === "Active"}
                           required
                           className="sr-only"
                           id="Active"
@@ -311,6 +313,7 @@ const NewCandidatePage = () => {
                         tabIndex={0}
                       >
                         <input
+                          checked={formState.status === "Suspend"}
                           required
                           className="sr-only"
                           id="Suspend"
@@ -331,6 +334,7 @@ const NewCandidatePage = () => {
                         tabIndex={0}
                       >
                         <input
+                          checked={formState.status === "Inactive"}
                           required
                           className="sr-only"
                           id="Inactive"
@@ -347,12 +351,13 @@ const NewCandidatePage = () => {
                   </div>
                 </div>
                 <div className="col-span-5">
-                  <div className="mb-2 py-2">Birthday</div>
+                  <div className="mb-2 py-2">birthday</div>
                   <input
                     required
                     className="w-full border rounded-lg border-gray-200 p-3 text-sm"
                     type="date"
                     id="birthday"
+                    value={formState.birthday.toString()}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -360,7 +365,7 @@ const NewCandidatePage = () => {
               <div className="mt-4 flex justify-end col-span-5 space-x-4">
                 <button
                   onClick={() => {
-                    window.location.href = `/events/${eventId}`;
+                    window.location.href = `/events/${params.eventId}`;
                   }}
                   type="button"
                   className="inline-block w-full rounded-lg bg-red-500 px-5 py-3 font-medium text-white sm:w-auto"
@@ -369,11 +374,11 @@ const NewCandidatePage = () => {
                 </button>
                 <button
                   disabled={disabled}
-                  onClick={createCandidate}
+                  onClick={updateCandidate}
                   type="submit"
                   className="inline-block w-full rounded-lg bg-black px-5 py-3 font-medium text-white sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Create Candidate
+                  Updat Candidate
                 </button>
               </div>
             </form>
@@ -384,4 +389,4 @@ const NewCandidatePage = () => {
   );
 };
 
-export default NewCandidatePage;
+export default EditCandidatePage;

@@ -1,7 +1,4 @@
 import { Link } from "react-router-dom";
-import { eventStorage } from "../../firebase";
-import { ref, getDownloadURL } from "firebase/storage";
-import { useState, useEffect } from "react";
 type CandidateListProps = {
   candidates: any;
   eventId: string | undefined;
@@ -45,7 +42,7 @@ const CandidatesList = ({ candidates, eventId }: CandidateListProps) => {
                           ></img>
                         </div>
                         <Link
-                          to={`/candidates/${candidate.id}`}
+                          to={`/events/${eventId}/candidates/${candidate.id}/edit`}
                           className="w-1/6 text-blue-400 overflow-x-auto"
                           target="_blank" // Add target="_blank" to open link in a new tab
                           rel="noopener noreferrer" // Add rel="noopener noreferrer" for security reasons
@@ -64,12 +61,12 @@ const CandidatesList = ({ candidates, eventId }: CandidateListProps) => {
                           10
                         </div>
                         <Link
-                          to={`https://devnet.suivision.xyz/object/${candidate.candidate_id}`}
+                          to={`https://devnet.suivision.xyz/object/${candidate.suiCandidateId}`}
                           className="w-1/6 text-blue-400 overflow-x-auto max-h-10"
                           target="_blank" // Add target="_blank" to open link in a new tab
                           rel="noopener noreferrer" // Add rel="noopener noreferrer" for security reasons
                         >
-                          {candidate.candidate_id}
+                          {candidate.suiCandidateId}
                         </Link>
                       </div>
                       <hr />

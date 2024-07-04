@@ -1,24 +1,25 @@
-import { useParams } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
-import { EventFormType } from "../../utils/formType";
-import { eventStorage, firestore } from "../../firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
-  getDoc,
-  doc,
-  updateDoc,
-  collection,
-  query,
-  getDocs,
-  where,
   DocumentData,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
 } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import CandidatesList from "../../components/candidatesList/CandidateList";
+import CsvUploader from "../../components/csv/CsvUploader";
+import { eventStorage, firestore } from "../../firebase";
+import { EventFormType } from "../../utils/formType";
 const EventDetailsPage = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { event_id } = useParams();
+  const { eventId } = useParams();
   const [image, setImage] = useState<File>();
-  const [imageName, setImageName] = useState("");
+  const [disabled, setDisabled] = useState<boolean>(false);
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
   const [candidates, setCandidates] = useState<DocumentData>([]);
   const [formState, setFormState] = useState<EventFormType>({
@@ -40,36 +41,25 @@ const EventDetailsPage = () => {
         startDate: event.data().startDate,
         endDate: event.data().endDate,
       };
-      const imageRef = ref(eventStorage, `events/${event.data().image_name}`);
-      await getDownloadURL(imageRef).then((r) => {
-        setImagePreviewUrl(r);
-      });
+      setImagePreviewUrl(event.data().imageUrl);
       setFormState(eventForm);
-      setImageName(event.data().image_name);
     }
-  }
-
-  async function getCandidatesImages(image_name: any) {
-    const imageRef = ref(eventStorage, `candidates/${image_name}`);
-    const url = await getDownloadURL(imageRef);
-    return url;
   }
 
   async function getCandidates(eventId: any) {
     const candidates: any = [];
     const candidatesCollection = collection(firestore, "candidates");
-    const q = query(candidatesCollection, where("event_id", "==", eventId));
+    const q = query(candidatesCollection, where("eventId", "==", eventId));
     const querySnapshot = await getDocs(q);
     querySnapshot.docs.map(async (doc) => {
-      const imageUrl = await getCandidatesImages(doc.data().image_name);
-      candidates.push({ ...doc.data(), imageUrl });
+      candidates.push({ id: doc.id, ...doc.data() });
     });
     setCandidates(candidates);
   }
 
   useEffect(() => {
-    getEvent(event_id);
-    getCandidates(event_id);
+    getEvent(eventId);
+    getCandidates(eventId);
   }, []);
 
   const handleInputChange = (event: any) => {
@@ -97,65 +87,50 @@ const EventDetailsPage = () => {
   const uploadImage = async () => {
     let result = {
       status: true,
-      image_name: "",
+      imageUrl: "",
     };
     if (image != null) {
       const imageName = image.name;
       const ImageRef = ref(eventStorage, `events/${imageName}`);
       await uploadBytes(ImageRef, image)
-        .then(() => {
+        .then(async () => {
+          const imageUrl = await getDownloadURL(ImageRef);
           result.status = true;
-          result.image_name = imageName;
+          result.imageUrl = imageUrl;
         })
         .catch((e) => {
           result.status = false;
           console.log(e);
         });
     }
+    if (image == null && imagePreviewUrl) {
+      result.status = true;
+      result.imageUrl = imagePreviewUrl;
+    }
     return result;
   };
 
   const updateEvent = async (e: any) => {
     e.preventDefault();
-    const imageUpload = await uploadImage();
-    if (imageUpload.status == true && imageUpload.image_name != "") {
-      const event = {
-        ...formState,
-        image_name: imageUpload.image_name,
-      };
-      console.log(event);
-
-      if (event_id) {
-        const docRef = doc(firestore, "events", event_id);
-        try {
-          await updateDoc(docRef, event).then(() => {
-            console.log(true);
-          }); // Pass the document reference and event object to the updateDoc function
-        } catch (error) {
-          console.log(error);
-        }
+    setDisabled(true);
+    if (eventId) {
+      const imageUpload = await uploadImage();
+      if (imageUpload.status == true) {
+        const event = {
+          ...formState,
+          imageUrl: imageUpload.imageUrl,
+        };
+        const docRef = doc(firestore, "events", eventId);
+        await updateDoc(docRef, event)
+          .then(() => {
+            alert("Event updated successfully");
+          })
+          .catch(() => {
+            alert("Event update failed");
+          });
       }
     }
-    if (
-      imageUpload.status == true &&
-      imageUpload.image_name == "" &&
-      event_id
-    ) {
-      const event = {
-        ...formState,
-        image_name: imageName,
-      };
-      console.log(event);
-
-      const docRef = doc(firestore, "events", event_id);
-      await updateDoc(docRef, event)
-        .then(() => {
-          alert("Event updated successfully");
-        })
-        .catch((e) => {
-          alert("Event update failed");
-        });
-    }
+    setDisabled(false);
   };
   return (
     <section className="bg-gray-100">
@@ -228,14 +203,24 @@ const EventDetailsPage = () => {
               </div>
             </div>
             <div className="col-span-3">
-              <div className="my-2 p-2">Event Image</div>
+              <div className="my-2 p-2 flex space-x-4">
+                <p>Event Image</p>
+                {imagePreviewUrl && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      fileInputRef.current?.click();
+                    }}
+                    className="text-blue-500"
+                  >
+                    Change
+                  </button>
+                )}
+              </div>
               <div>
                 <div className="flex items-center justify-center">
                   <div
                     className={`border-2 border-dashed border-gray-40 text-center bg-white rounded-lg max-w-md w-full cursor-pointer ${!imagePreviewUrl && "p-24"}`}
-                    onClick={() => {
-                      fileInputRef.current?.click();
-                    }}
                     style={{ height: "292px" }}
                   >
                     {imagePreviewUrl ? (
@@ -244,29 +229,34 @@ const EventDetailsPage = () => {
                         style={{ maxHeight: "400px", height: "100%" }}
                         src={imagePreviewUrl}
                         alt=""
-                        onClick={() => {
-                          fileInputRef.current?.click();
-                        }}
                       />
                     ) : (
                       <div>
                         <p className="text-lg mb-2">
                           <strong>Add & Drop</strong> or{" "}
-                          <span className="text-blue-500">Browse</span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              fileInputRef.current?.click();
+                            }}
+                            className="text-blue-500"
+                          >
+                            Browse
+                          </button>
                         </p>
                         <p className="text-sm text-gray-600">
                           We currently support JPG, JPEG, PNG and make sure your
                           file size is not more than 500kb
                         </p>
-                        <input
-                          type="file"
-                          ref={fileInputRef}
-                          className="hidden"
-                          onChange={handleImageChange}
-                          accept=".jpg, .jpeg, .png"
-                        />
                       </div>
                     )}
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      className="hidden"
+                      onChange={handleImageChange}
+                      accept=".jpg, .jpeg, .png"
+                    />
                   </div>
                 </div>
               </div>
@@ -328,9 +318,10 @@ const EventDetailsPage = () => {
                 Cancel
               </button>
               <button
+                disabled={disabled}
                 onClick={updateEvent}
                 type="submit"
-                className="inline-block w-full rounded-lg bg-black px-5 py-3 font-medium text-white sm:w-auto"
+                className="inline-block w-full rounded-lg bg-black px-5 py-3 font-medium text-white sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Update Event
               </button>
@@ -338,7 +329,8 @@ const EventDetailsPage = () => {
           </form>
         </div>
       </div>
-      <CandidatesList eventId={event_id} candidates={candidates} />
+      <CsvUploader  eventName={formState.name} eventRef={eventId} />
+      <CandidatesList eventId={eventId} candidates={candidates} />
     </section>
   );
 };
