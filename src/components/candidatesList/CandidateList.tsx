@@ -61,7 +61,8 @@ const CandidatesList = ({ candidates, eventId }: CandidateListProps) => {
                           10
                         </div>
                         <Link
-                          to={`https://devnet.suivision.xyz/object/${candidate.suiCandidateId}`}
+                          // to={`https://devnet.suivision.xyz/object/${candidate.suiCandidateId}`}
+                          to={`https://testnet.suivision.xyz/object/${candidate.suiCandidateId}`}
                           className="w-1/6 text-blue-400 overflow-x-auto max-h-10"
                           target="_blank" // Add target="_blank" to open link in a new tab
                           rel="noopener noreferrer" // Add rel="noopener noreferrer" for security reasons
