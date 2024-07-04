@@ -8,7 +8,8 @@ import Logo from "./logo.png";
 
 /* Configuration */
 
-const NETWORK: NetworkName = "devnet";
+// const NETWORK: NetworkName = "devnet";
+const NETWORK: NetworkName = "testnet";
 const MAX_EPOCH = 2; // keep ephemeral keys active for this many Sui epochs from now (1 epoch ~= 24h)
 
 const suiClient = new SuiClient({

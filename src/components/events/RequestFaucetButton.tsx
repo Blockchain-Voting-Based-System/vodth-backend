@@ -36,7 +36,8 @@ const RequestFaucetButton = () => {
         className="px-8 py-2 bg-slate-500 rounded-md"
         onClick={async () => {
           await requestSuiFromFaucetV1({
-            host: getFaucetHost("devnet"),
+            // host: getFaucetHost("devnet"),
+            host: getFaucetHost("testnet"),
             recipient: MY_ADDRESS,
           });
 

@@ -1,8 +1,10 @@
+import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
 import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
-import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
 import { NetworkName } from "@polymedia/suits";
-const NETWORK: NetworkName = "devnet";
+
+// const NETWORK: NetworkName = "devnet";
+const NETWORK: NetworkName = "testnet";
 
 const suiClient = new SuiClient({
   url: getFullnodeUrl(NETWORK),
