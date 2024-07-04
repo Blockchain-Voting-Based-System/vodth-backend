@@ -1,9 +1,10 @@
-import { SuiAccount } from "../components/account/SuiAccount";
-import { WalletStatus } from "../components/wallet/WalletStatus";
 import { ConnectButton } from "@mysten/dapp-kit";
 import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
-import { keypairFromSecretKey } from "../utils/sui";
+import Login from "../auth/Login";
+import { SuiAccount } from "../components/account/SuiAccount";
 import RequestFaucetButton from "../components/events/RequestFaucetButton";
+import { WalletStatus } from "../components/wallet/WalletStatus";
+import { keypairFromSecretKey } from "../utils/sui";
 const HomePage = () => {
   function testMnenic() {
     const words =
@@ -30,8 +31,10 @@ const HomePage = () => {
             testMnenic();
           }}
         >
-          dsfjlsdfhjsjskf
+          Test Mnemonic
         </button>
+
+        <Login />
       </div>
     </>
   );
