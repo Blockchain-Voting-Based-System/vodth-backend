@@ -1,6 +1,5 @@
 import { ConnectButton } from "@mysten/dapp-kit";
 import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
-import Login from "../auth/Login";
 import { SuiAccount } from "../components/account/SuiAccount";
 import RequestFaucetButton from "../components/events/RequestFaucetButton";
 import { WalletStatus } from "../components/wallet/WalletStatus";
@@ -33,8 +32,6 @@ const HomePage = () => {
         >
           Test Mnemonic
         </button>
-
-        <Login />
       </div>
     </>
   );
