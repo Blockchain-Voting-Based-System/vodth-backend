@@ -13,33 +13,37 @@ import NewCandidate from "./pages/candidates/CandidateNewPage.tsx";
 import CandidatesPage from "./pages/candidates/CandidatesPage.tsx";
 import EditCandidatePage from "./pages/candidates/CandidatesEditPage.tsx";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import SignInWithGoogle from "./auth/Login.tsx";
-import { LoginPage } from "./pages/auth/LoginPage.tsx";
+import SignIn from "./auth/Login.tsx";
+import ProtectedRoute from "./components/routes/ProtectedRoute.tsx"; // Import the ProtectedRoute component
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<DefaultLayout />}>
-        <Route index element={<HomePage />} />
-        <Route path="events" element={<EventPage />} />
-        <Route path="events/new" element={<NewEventPage />} />
-        <Route path="events/:eventId" element={<EventDetailsPage />} />
-        <Route path="events/:eventId" element={<EventDetailsPage />} />
+      <Route path="/signin" element={<SignIn />} />
+      <Route path="/" element={<ProtectedRoute element={DefaultLayout} />}>
+        <Route index element={<ProtectedRoute element={HomePage} />} />
+        <Route path="events" element={<ProtectedRoute element={EventPage} />} />
+        <Route
+          path="events/new"
+          element={<ProtectedRoute element={NewEventPage} />}
+        />
+        <Route
+          path="events/:eventId"
+          element={<ProtectedRoute element={EventDetailsPage} />}
+        />
         <Route
           path="events/:eventId/candidates"
-          element={<CandidatesPage></CandidatesPage>}
-        ></Route>
+          element={<ProtectedRoute element={CandidatesPage} />}
+        />
         <Route
           path="events/:eventId/candidates/new"
-          element={<NewCandidate />}
+          element={<ProtectedRoute element={NewCandidate} />}
         />
         <Route
           path="events/:eventId/candidates/:candidateId/edit"
-          element={<EditCandidatePage />}
+          element={<ProtectedRoute element={EditCandidatePage} />}
         />
       </Route>
-      <Route path="/sigin" element={<LoginPage />} />
-      <Route path="/login" element={<SignInWithGoogle />} />
     </>,
   ),
 );

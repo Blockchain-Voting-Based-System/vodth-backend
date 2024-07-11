@@ -53,6 +53,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     signInWithEmailAndPassword(auth, email, password)
       .then((result) => {
         setUser(result.user);
+        window.location.href = "/";
       })
       .catch((error) => console.error("Error signing in with email:", error));
   };

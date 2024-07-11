@@ -13,7 +13,6 @@ import { getFullnodeUrl } from "@mysten/sui.js/client";
 import { Theme } from "@radix-ui/themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App.tsx";
-
 const queryClient = new QueryClient();
 
 const { networkConfig } = createNetworkConfig({
