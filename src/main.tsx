@@ -3,7 +3,7 @@ import "@radix-ui/themes/styles.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-
+import { UserProvider } from "./auth/UserContext";
 import {
   SuiClientProvider,
   WalletProvider,
@@ -29,7 +29,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <QueryClientProvider client={queryClient}>
         <SuiClientProvider networks={networkConfig} defaultNetwork="devnet">
           <WalletProvider autoConnect>
-            <App />
+            <UserProvider>
+              <App />
+            </UserProvider>
           </WalletProvider>
         </SuiClientProvider>
       </QueryClientProvider>
