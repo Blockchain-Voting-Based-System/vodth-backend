@@ -210,15 +210,15 @@ const NewEventPage = () => {
                             We currently support JPG, JPEG, PNG and make sure
                             your file size is not more than 500kb
                           </p>
-                          <input
-                            type="file"
-                            ref={fileInputRef}
-                            className="hidden"
-                            onChange={handleImageChange}
-                            accept=".jpg, .jpeg, .png"
-                          />
                         </div>
                       )}
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        className="hidden"
+                        onChange={handleImageChange}
+                        accept=".jpg, .jpeg, .png"
+                      />
                     </div>
                   </div>
                 </div>

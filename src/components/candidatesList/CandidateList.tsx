@@ -3,7 +3,7 @@ type CandidateListProps = {
   candidates: any;
   eventId: string | undefined;
 };
-const CandidatesList = ({ candidates, eventId }: CandidateListProps) => {
+const CandidatesList = ({ candidates = [], eventId }: CandidateListProps) => {
   return (
     <section className="bg-gray-100">
       <div className="mx-auto py-6 px-1 sm:px-2 lg:px-4">
