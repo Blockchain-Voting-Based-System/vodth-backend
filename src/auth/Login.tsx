@@ -312,7 +312,7 @@ const SignInWithGoogle: React.FC = () => {
                   <button
                     onClick={handleLoginWithGoogle}
                     key="Google"
-                    className="h-10 w-full rounded-xl inline-flex items-center justify-center gap-3 px-4 py-2 disabled:opacity-40 focus:opacity-80 bg-white text-steel-dark border border-solid border-steel hover:border-steel-dark"
+                    className="h-10 w-full rounded-xl inline-flex items-center justify-center gap-3 px-4 py-2 disabled:opacity-40 focus:opacity-80 bg-white text-steel-dark border border-solid border-steel hover:border-steel-dark hidden"
                     aria-label="Sign in with Google"
                     type="button"
                   >

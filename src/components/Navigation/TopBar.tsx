@@ -3,7 +3,7 @@ import React from "react";
 import { useUser } from "../../auth/UserContext";
 
 const Topbar: React.FC = () => {
-  const { handleLogout } = useUser();
+  const { user } = useUser();
   return (
     <div className="border-b flex justify-between items-center h-16 bg-white shadow-md px-6">
       <div className="flex items-center">
@@ -18,13 +18,18 @@ const Topbar: React.FC = () => {
         <button className="text-gray-500 focus:outline-none mx-4">
           <i className="fas fa-bell"></i>
         </button>
-
-        <button
-          onClick={handleLogout}
-          className="text-red-600 hover:bg-red-100 p-1 rounded"
-        >
-          <i className="fas fa-sign-out-alt w-6 h-4"></i>
-        </button>
+        {user && (
+          <div className="flex flex-col items-center px-4 py-2">
+            <img
+              src={
+                user.photoURL ??
+                "https://avatars.githubusercontent.com/u/109834020?v=4"
+              }
+              alt="User Avatar"
+              className="w-10 h-10 rounded-full"
+            />
+          </div>
+        )}
       </div>
     </div>
   );
