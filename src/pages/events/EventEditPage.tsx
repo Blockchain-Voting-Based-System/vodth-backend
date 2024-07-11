@@ -14,6 +14,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import CandidatesList from "../../components/candidatesList/CandidateList";
+import CsvUploader from "../../components/csv/CsvUploader";
 import { eventStorage, firestore } from "../../firebase";
 import { EventFormType } from "../../utils/formType";
 const EventDetailsPage = () => {
@@ -146,8 +147,9 @@ const EventDetailsPage = () => {
                   <div className="flex flex-column h-12rem">
                     <div className="border-2 border-dashed surface-border border-round surface-ground flex-auto  align-items-center font-medium">
                       <div className="text-2xl font-semibold my-4 ml-8 inline-block">
-                        Event Detail
+                        Event Details
                       </div>
+                      <hr />
                       <form className="grid grid-cols-7 space-x-4 px-8 pt-4 pb-8">
                         <div className="col-span-4">
                           <div className="p-2 my-2">Event Name</div>
@@ -211,14 +213,24 @@ const EventDetailsPage = () => {
                           </div>
                         </div>
                         <div className="col-span-3">
-                          <div className="my-2 p-2">Event Image</div>
+                          <div className="my-2 p-2 flex space-x-4">
+                            <p>Event Image</p>
+                            {imagePreviewUrl && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  fileInputRef.current?.click();
+                                }}
+                                className="text-blue-500"
+                              >
+                                Change
+                              </button>
+                            )}
+                          </div>
                           <div>
                             <div className="flex items-center justify-center">
                               <div
                                 className={`border-2 border-dashed border-gray-40 text-center bg-white rounded-lg max-w-md w-full cursor-pointer ${!imagePreviewUrl && "p-24"}`}
-                                onClick={() => {
-                                  fileInputRef.current?.click();
-                                }}
                                 style={{ height: "292px" }}
                               >
                                 {imagePreviewUrl ? (
@@ -230,32 +242,35 @@ const EventDetailsPage = () => {
                                     }}
                                     src={imagePreviewUrl}
                                     alt=""
-                                    onClick={() => {
-                                      fileInputRef.current?.click();
-                                    }}
                                   />
                                 ) : (
                                   <div>
                                     <p className="text-lg mb-2">
                                       <strong>Add & Drop</strong> or{" "}
-                                      <span className="text-blue-500">
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          fileInputRef.current?.click();
+                                        }}
+                                        className="text-blue-500"
+                                      >
                                         Browse
-                                      </span>
+                                      </button>
                                     </p>
                                     <p className="text-sm text-gray-600">
                                       We currently support JPG, JPEG, PNG and
                                       make sure your file size is not more than
                                       500kb
                                     </p>
-                                    <input
-                                      type="file"
-                                      ref={fileInputRef}
-                                      className="hidden"
-                                      onChange={handleImageChange}
-                                      accept=".jpg, .jpeg, .png"
-                                    />
                                   </div>
                                 )}
+                                <input
+                                  type="file"
+                                  ref={fileInputRef}
+                                  className="hidden"
+                                  onChange={handleImageChange}
+                                  accept=".jpg, .jpeg, .png"
+                                />
                               </div>
                             </div>
                           </div>
@@ -323,9 +338,10 @@ const EventDetailsPage = () => {
                             Cancel
                           </button>
                           <button
+                            disabled={disabled}
                             onClick={updateEvent}
                             type="submit"
-                            className="inline-block w-full rounded-lg bg-black px-5 py-3 font-medium text-white sm:w-auto"
+                            className="inline-block w-full rounded-lg bg-black px-5 py-3 font-medium text-white sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             Update Event
                           </button>
