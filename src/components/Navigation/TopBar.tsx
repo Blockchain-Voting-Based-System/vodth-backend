@@ -1,6 +1,7 @@
 // src/components/Topbar.tsx
 import React from "react";
 import { useUser } from "../../auth/UserContext";
+import { updateProfile } from "firebase/auth";
 
 import { InputText } from "primereact/inputtext";
 const Topbar: React.FC = () => {
@@ -29,6 +30,13 @@ const Topbar: React.FC = () => {
         {user && (
           <div className="flex flex-col items-center px-4 py-2">
             <img
+              onClick={() => {
+                updateProfile(user, {
+                  photoURL:
+                    "https://firebasestorage.googleapis.com/v0/b/vodth-dapp.appspot.com/o/events%2FBlockchain%20Voting%20Logo.png?alt=media&token=cc89c3c5-b26d-47a9-917e-b7fd37a7e320",
+                  displayName: "Vodth Admin",
+                });
+              }}
               src={
                 user.photoURL ??
                 "https://avatars.githubusercontent.com/u/109834020?v=4"
