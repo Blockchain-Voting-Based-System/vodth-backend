@@ -11,7 +11,7 @@ interface CsvUploaderProps {
   eventRef: any;
 }
 
-const CsvUploader: React.FC<CsvUploaderProps> = ({eventName, eventRef}) => {
+const CsvUploader: React.FC<CsvUploaderProps> = ({ eventName, eventRef }) => {
   const [csvData, setCsvData] = useState<any[]>([]);
 
   const handleFileLoaded = (data: any) => {

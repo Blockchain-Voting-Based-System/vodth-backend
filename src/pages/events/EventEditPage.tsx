@@ -15,7 +15,10 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import CandidatesList from "../../components/candidatesList/CandidateList";
 import { eventStorage, firestore } from "../../firebase";
+import { getEventObject } from "../../utils/getSuiEvent";
+import CsvUploader from "../../components/csv/CsvUploader";
 import { EventFormType } from "../../utils/formType";
+import { getCandidateObjects } from "../../utils/getSuiCandidate";
 const EventDetailsPage = () => {
   const stepperRef = useRef(null);
 
@@ -25,12 +28,14 @@ const EventDetailsPage = () => {
   const [disabled, setDisabled] = useState<boolean>(false);
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
   const [candidates, setCandidates] = useState<DocumentData>([]);
+  const [suiCandidates, setSuiCandidates] = useState<any>([]);
   const [formState, setFormState] = useState<EventFormType>({
     name: "",
     type: "",
     description: "",
     startDate: new Date(),
     endDate: new Date(),
+    suiEventId: "",
   });
 
   async function getEvent(param: any) {
@@ -43,6 +48,7 @@ const EventDetailsPage = () => {
         description: event.data().description,
         startDate: event.data().startDate,
         endDate: event.data().endDate,
+        suiEventId: event.data().suiEventId,
       };
       setImagePreviewUrl(event.data().imageUrl);
       setFormState(eventForm);
@@ -53,11 +59,16 @@ const EventDetailsPage = () => {
     const candidates: any = [];
     const candidatesCollection = collection(firestore, "candidates");
     const q = query(candidatesCollection, where("eventId", "==", eventId));
+    const suiCandidateId: Array<string> = [];
     const querySnapshot = await getDocs(q);
     querySnapshot.docs.map(async (doc) => {
       candidates.push({ id: doc.id, ...doc.data() });
+      suiCandidateId.push(doc.data().suiCandidateId);
     });
-    setCandidates(candidates);
+    await getCandidateObjects(suiCandidateId).then((result) => {
+      setSuiCandidates(result);
+      setCandidates(candidates);
+    });
   }
 
   useEffect(() => {
@@ -340,6 +351,7 @@ const EventDetailsPage = () => {
                       <CandidatesList
                         eventId={eventId}
                         candidates={candidates}
+                        suiCandidates={suiCandidates}
                       />
                     </div>
                   </div>
@@ -348,6 +360,10 @@ const EventDetailsPage = () => {
                   <div className="flex flex-column h-12rem">
                     <div className="border-2 border-dashed surface-border border-round surface-ground flex-auto align-items-center font-medium">
                       CSV
+                      <CsvUploader
+                        eventName={formState.name}
+                        eventRef={eventId}
+                      />
                     </div>
                   </div>
                 </StepperPanel>

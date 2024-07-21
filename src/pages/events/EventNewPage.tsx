@@ -18,6 +18,7 @@ const NewEventPage = () => {
     description: "",
     startDate: new Date(),
     endDate: new Date(),
+    suiEventId: "",
   });
   const [image, setImage] = useState<File>();
 
