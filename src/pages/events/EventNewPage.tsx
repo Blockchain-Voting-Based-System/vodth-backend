@@ -282,7 +282,7 @@ const NewEventPage = () => {
                   disabled={disabled}
                   onClick={createEvent}
                   type="submit"
-                  className="inline-block w-full rounded-lg bg-black px-5 py-3 font-medium text-white sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-block w-full rounded-lg bg-green-600 px-5 py-3 font-medium text-white sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Create Event
                 </button>

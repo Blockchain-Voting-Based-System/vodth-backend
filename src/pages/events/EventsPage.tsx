@@ -29,7 +29,7 @@ const EventPage = () => {
   }, []);
 
   return (
-    <div className="bg-gray-100 mx-auto py-10 px-1 sm:px-2 lg:px-4 max-h-screen">
+    <div className="bg-gray-100 mx-auto py-10 px-1 sm:px-2 lg:px-8 max-h-screen">
       <div className="container mx-auto p-4 shadow-lg rounded-2xl bg-white">
         <div className="flex justify-between justify-items-center">
           <h2 className="text-2xl font-semibold h-12 my-4">Events List</h2>
