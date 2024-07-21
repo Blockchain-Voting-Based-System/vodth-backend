@@ -14,6 +14,7 @@ export const NewCandidateButton = ({ account }: NewCandidateButtonProps) => {
     const event_id =
       "0xf0888aeed150159cafa654daa8556e05f14d2ebd564a4e25116dd7329eb73989";
     setModalContent("🚀 Creating Candidate...");
+
     const result = await NewCandidate(event_id);
 
     if (result.success) {

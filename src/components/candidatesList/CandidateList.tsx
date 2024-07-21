@@ -2,8 +2,13 @@ import { Link } from "react-router-dom";
 type CandidateListProps = {
   candidates: any;
   eventId: string | undefined;
+  suiCandidates: any;
 };
-const CandidatesList = ({ candidates = [], eventId }: CandidateListProps) => {
+const CandidatesList = ({
+  candidates = [],
+  eventId,
+  suiCandidates = [],
+}: CandidateListProps) => {
   return (
     <section className="bg-gray-100">
       <div className="mx-auto py-6 px-1 sm:px-2 lg:px-4">
@@ -58,7 +63,7 @@ const CandidatesList = ({ candidates = [], eventId }: CandidateListProps) => {
                           {candidate.sex}
                         </div>
                         <div className=" inline-block w-1/6 overflow-x-auto">
-                          10
+                          {suiCandidates[index]?.data?.content?.fields?.voted}
                         </div>
                         <Link
                           // to={`https://devnet.suivision.xyz/object/${candidate.suiCandidateId}`}

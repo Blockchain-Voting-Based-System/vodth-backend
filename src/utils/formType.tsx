@@ -4,4 +4,5 @@ export type EventFormType = {
   description: "";
   startDate: Date;
   endDate: Date;
+  suiEventId: "";
 };

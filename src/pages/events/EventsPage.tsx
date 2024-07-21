@@ -7,18 +7,24 @@ import {
   query,
 } from "firebase/firestore";
 import { Link } from "react-router-dom";
-// const header = ["Subject", "Type", "Duration", "Created by", "Date", "Status"];
+import { getEventObjects } from "../../utils/getSuiEvent";
 const EventPage = () => {
   const [events, setEvents] = useState<DocumentData>([]);
+  const [suiEventData, setSuiEventData] = useState<any>([]);
   const firestore = getFirestore();
-
+  const eventIds: Array<string> = [];
   useEffect(() => {
     const fetchEvents = async () => {
       const q = query(collection(firestore, "events"));
       const eventSnapshot = await getDocs(q);
-      setEvents(eventSnapshot.docs);
+      eventSnapshot.forEach((doc) => {
+        eventIds.push(doc.data().suiEventId);
+      });
+      await getEventObjects(eventIds).then((result) => {
+        setSuiEventData(result);
+        setEvents(eventSnapshot.docs);
+      });
     };
-
     fetchEvents();
   }, []);
 
@@ -40,11 +46,11 @@ const EventPage = () => {
         <div className="overflow-x-auto my-2">
           <div className="">
             <div className="flex justify-around bg-gray-100 p-4 rounded-2xl my-4">
-              <span className="w-1/6 overflow-x-auto">Subject</span>
+              <span className="w-1/6 overflow-x-auto">Poll Name</span>
               <span className="w-1/6 overflow-x-auto">Type</span>
-              <span className="w-1/6 overflow-x-auto">Duration</span>
-              <span className="w-1/6 overflow-x-auto">Created by</span>
-              <span className="w-1/6 overflow-x-auto">Date</span>
+              <span className="w-1/6 overflow-x-auto">Candidates</span>
+              <span className="w-1/6 overflow-x-auto">Voted</span>
+              <span className="w-1/6 overflow-x-auto">Start Date</span>
               <span className="w-1/6 overflow-x-auto">Status</span>
             </div>
             <div className="overflow-y-auto" style={{ maxHeight: "490px" }}>
@@ -62,16 +68,17 @@ const EventPage = () => {
                         {event.data().type}
                       </span>
                       <span className="w-1/6 overflow-x-auto">
-                        {event.data().endDate}
+                        {suiEventData[index]?.data?.content?.fields?.candidates}
+                      </span>
+                      <span className="w-1/6 overflow-x-auto">
+                        {suiEventData[index]?.data?.content?.fields?.voted}
                       </span>
                       <span className="w-1/6 overflow-x-auto">
                         {event.data().startDate}
                       </span>
                       <span className="w-1/6 overflow-x-auto">
-                        {event.data().endDate}
-                      </span>
-                      <span className="w-1/6 overflow-x-auto">
-                        {event.data().startDate}
+                        {/* {event.data().startDate} */}
+                        Ended
                       </span>
                     </div>
                     <hr />
