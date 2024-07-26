@@ -20,7 +20,11 @@ const Event = () => {
           <StepperPanel header="Candidate">
             <div className="flex flex-column h-12rem">
               <div className="border-2 border-dashed surface-border border-round surface-ground flex-auto  align-items-center font-medium">
-                <CandidatesList candidates={undefined} eventId={undefined} />
+                <CandidatesList
+                  candidates={undefined}
+                  eventId={undefined}
+                  suiCandidates={undefined}
+                />
               </div>
             </div>
           </StepperPanel>

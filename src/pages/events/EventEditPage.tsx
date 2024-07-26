@@ -326,7 +326,7 @@ const EventDetailsPage = () => {
                         <div className="col-span-3 mt-10 flex justify-end space-x-8">
                           <button
                             onClick={() => {
-                              window.location.href = "/events";
+                              window.location.href = "/";
                             }}
                             type="button"
                             className="inline-block w-full rounded-lg bg-red-500 px-5 py-3 font-medium text-white sm:w-auto"
@@ -336,7 +336,7 @@ const EventDetailsPage = () => {
                           <button
                             onClick={updateEvent}
                             type="submit"
-                            className="inline-block w-full rounded-lg bg-black px-5 py-3 font-medium text-white sm:w-auto"
+                            className="inline-block w-full rounded-lg bg-green-600 px-5 py-3 font-medium text-white sm:w-auto"
                           >
                             Update Event
                           </button>
