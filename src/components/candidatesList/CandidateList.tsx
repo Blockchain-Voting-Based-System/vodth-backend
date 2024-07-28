@@ -43,14 +43,14 @@ const CandidatesList = ({
                         <div className="w-1/6">
                           <img
                             src={candidate.imageUrl}
-                            className=" inline-block w-16 h-16 rounded-full overflow-hidden shadow-lg"
+                            className="inline-block w-16 h-16 rounded-full overflow-hidden shadow-lg object-cover"
                           ></img>
                         </div>
                         <Link
                           to={`/events/${eventId}/candidates/${candidate.id}/edit`}
                           className="w-1/6 text-blue-400 overflow-x-auto"
-                          target="_blank" // Add target="_blank" to open link in a new tab
-                          rel="noopener noreferrer" // Add rel="noopener noreferrer" for security reasons
+                          target="_blank"
+                          rel="noopener noreferrer"
                         >
                           {candidate.name}
                         </Link>
@@ -66,11 +66,10 @@ const CandidatesList = ({
                           {suiCandidates[index]?.data?.content?.fields?.voted}
                         </div>
                         <Link
-                          // to={`https://devnet.suivision.xyz/object/${candidate.suiCandidateId}`}
                           to={`https://testnet.suivision.xyz/object/${candidate.suiCandidateId}`}
                           className="w-1/6 text-blue-400 overflow-x-auto max-h-10"
-                          target="_blank" // Add target="_blank" to open link in a new tab
-                          rel="noopener noreferrer" // Add rel="noopener noreferrer" for security reasons
+                          target="_blank"
+                          rel="noopener noreferrer"
                         >
                           {candidate.suiCandidateId}
                         </Link>
