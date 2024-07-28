@@ -145,7 +145,7 @@ const NewEventPage = () => {
                     <input
                       required
                       className="w-full border rounded-lg border-gray-200 p-3 text-sm"
-                      type="date"
+                      type="datetime-local"
                       id="startDate"
                       onChange={handleInputChange}
                     />
@@ -158,7 +158,7 @@ const NewEventPage = () => {
                     <input
                       required
                       className="w-full border rounded-lg border-gray-200 p-3 text-sm"
-                      type="date"
+                      type="datetime-local"
                       id="endDate"
                       onChange={handleInputChange}
                     />
@@ -194,16 +194,14 @@ const NewEventPage = () => {
                           alt=""
                         />
                       ) : (
-                        <div>
+                        <div
+                          onClick={() => {
+                            fileInputRef.current?.click();
+                          }}
+                        >
                           <p className="text-lg mb-2">
                             <strong>Add & Drop</strong> or{" "}
-                            <button
-                              type="button"
-                              onClick={() => {
-                                fileInputRef.current?.click();
-                              }}
-                              className="text-blue-500"
-                            >
+                            <button type="button" className="text-blue-500">
                               Browse
                             </button>
                           </p>
@@ -211,15 +209,15 @@ const NewEventPage = () => {
                             We currently support JPG, JPEG, PNG and make sure
                             your file size is not more than 500kb
                           </p>
-                          <input
-                            type="file"
-                            ref={fileInputRef}
-                            className="hidden"
-                            onChange={handleImageChange}
-                            accept=".jpg, .jpeg, .png"
-                          />
                         </div>
                       )}
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        className="hidden"
+                        onChange={handleImageChange}
+                        accept=".jpg, .jpeg, .png"
+                      />
                     </div>
                   </div>
                 </div>

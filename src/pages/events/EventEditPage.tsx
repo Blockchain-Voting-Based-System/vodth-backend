@@ -199,7 +199,7 @@ const EventDetailsPage = () => {
                               <input
                                 required
                                 className="w-full border rounded-lg border-gray-200 p-3 text-sm"
-                                type="date"
+                                type="datetime-local"
                                 id="startDate"
                                 value={formState.startDate.toString()}
                                 onChange={handleInputChange}
@@ -213,7 +213,7 @@ const EventDetailsPage = () => {
                               <input
                                 required
                                 className="w-full border rounded-lg border-gray-200 p-3 text-sm"
-                                type="date"
+                                type="datetime-local"
                                 id="endDate"
                                 value={formState.endDate.toString()}
                                 onChange={handleInputChange}

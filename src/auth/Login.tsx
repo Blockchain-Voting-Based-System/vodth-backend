@@ -90,7 +90,7 @@ const SignIn: React.FC = () => {
             <div className="relative flex flex-col flex-nowrap items-center justify-center w-popup-width min-h-popup-minimum max-h-popup-height overflow-hidden shadow-lg rounded-xl">
               <div className="rounded-20 bg-sui-lightest shadow-wallet-content flex flex-col items-center px-7 py-6 h-full overflow-auto">
                 <div className="shrink-0">
-                  <img className="max-h-32" src={Logo} alt="" />
+                  <img className="max-h-32 object-cover" src={Logo} alt="" />
                 </div>
                 <div className="text-center mx-auto mt-2">
                   <h1 className="my-0 md:text-heading2 text-heading3 text-gray-90 font-bold leading-tight">

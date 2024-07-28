@@ -33,7 +33,7 @@ const HomePage = () => {
     fetchEvents();
   }, []);
   return (
-    <div className="">
+    <div>
       <div className="flex p-8 space-x-8 overflow-x-auto">
         <PollStatus events={events}></PollStatus>
         <FindPoll></FindPoll>
