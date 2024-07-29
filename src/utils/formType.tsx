@@ -5,4 +5,5 @@ export type EventFormType = {
   startDate: Date;
   endDate: Date;
   suiEventId: "";
+  status: String;
 };

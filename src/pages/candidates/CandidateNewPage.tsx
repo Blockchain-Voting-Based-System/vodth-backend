@@ -252,7 +252,11 @@ const NewCandidatePage = () => {
                             alt="candidate profile picture"
                           />
                         ) : (
-                          <div>
+                          <div
+                            onClick={() => {
+                              fileInputRef.current?.click();
+                            }}
+                          >
                             <p className="text-lg mb-2">
                               <strong>Add & Drop</strong> or{" "}
                               <button
@@ -307,14 +311,14 @@ const NewCandidatePage = () => {
                     </div>
                     <div>
                       <label
-                        htmlFor="Suspend"
+                        htmlFor="Suspended"
                         className="block w-full cursor-pointer rounded-lg border border-gray-200 p-2 text-gray-600 hover:bg-yellow-200 has-[:checked]:bg-yellow-500 has-[:checked]:text-white"
                         tabIndex={0}
                       >
                         <input
                           required
                           className="sr-only"
-                          id="Suspend"
+                          id="Suspended"
                           type="radio"
                           tabIndex={1}
                           name="status"
@@ -322,7 +326,7 @@ const NewCandidatePage = () => {
                           onChange={handleStatusChange}
                         />
 
-                        <span className="text-sm"> Suspend </span>
+                        <span className="text-sm"> Suspended </span>
                       </label>
                     </div>
                     <div>

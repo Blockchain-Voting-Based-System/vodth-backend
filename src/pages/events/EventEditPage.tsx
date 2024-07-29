@@ -2,6 +2,7 @@ import { Stepper } from "primereact/stepper";
 import { StepperPanel } from "primereact/stepperpanel";
 import {
   DocumentData,
+  Timestamp,
   collection,
   doc,
   getDoc,
@@ -12,10 +13,9 @@ import {
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import CandidatesList from "../../components/candidatesList/CandidateList";
 import { eventStorage, firestore } from "../../firebase";
-import { getEventObject } from "../../utils/getSuiEvent";
 import CsvUploader from "../../components/csv/CsvUploader";
 import { EventFormType } from "../../utils/formType";
 import { getCandidateObjects } from "../../utils/getSuiCandidate";
@@ -36,6 +36,7 @@ const EventDetailsPage = () => {
     startDate: new Date(),
     endDate: new Date(),
     suiEventId: "",
+    status,
   });
 
   async function getEvent(param: any) {
@@ -49,6 +50,7 @@ const EventDetailsPage = () => {
         startDate: event.data().startDate,
         endDate: event.data().endDate,
         suiEventId: event.data().suiEventId,
+        status: event.data().status,
       };
       setImagePreviewUrl(event.data().imageUrl);
       setFormState(eventForm);
@@ -130,9 +132,18 @@ const EventDetailsPage = () => {
     if (eventId) {
       const imageUpload = await uploadImage();
       if (imageUpload.status == true) {
+        const startDateTime = new Date(formState.startDate);
+        const now = new Date();
+        const status =
+          startDateTime > now
+            ? (formState.status = "pending")
+            : (formState.status = "active");
+
         const event = {
           ...formState,
           imageUrl: imageUpload.imageUrl,
+          status: status,
+          updatedAt: Timestamp.now(),
         };
         const docRef = doc(firestore, "events", eventId);
         await updateDoc(docRef, event)
@@ -222,14 +233,24 @@ const EventDetailsPage = () => {
                           </div>
                         </div>
                         <div className="col-span-3">
-                          <div className="my-2 p-2">Event Image</div>
+                          <div className=" flex my-2 p-2 space-x-4">
+                            <p>Poll Banner</p>
+                            {imagePreviewUrl && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  fileInputRef.current?.click();
+                                }}
+                                className="text-blue-500"
+                              >
+                                Change
+                              </button>
+                            )}
+                          </div>
                           <div>
                             <div className="flex items-center justify-center">
                               <div
                                 className={`border-2 border-dashed border-gray-40 text-center bg-white rounded-lg max-w-md w-full cursor-pointer ${!imagePreviewUrl && "p-24"}`}
-                                onClick={() => {
-                                  fileInputRef.current?.click();
-                                }}
                                 style={{ height: "292px" }}
                               >
                                 {imagePreviewUrl ? (
@@ -241,9 +262,6 @@ const EventDetailsPage = () => {
                                     }}
                                     src={imagePreviewUrl}
                                     alt=""
-                                    onClick={() => {
-                                      fileInputRef.current?.click();
-                                    }}
                                   />
                                 ) : (
                                   <div>
@@ -258,15 +276,15 @@ const EventDetailsPage = () => {
                                       make sure your file size is not more than
                                       500kb
                                     </p>
-                                    <input
-                                      type="file"
-                                      ref={fileInputRef}
-                                      className="hidden"
-                                      onChange={handleImageChange}
-                                      accept=".jpg, .jpeg, .png"
-                                    />
                                   </div>
                                 )}
+                                <input
+                                  type="file"
+                                  ref={fileInputRef}
+                                  className="hidden"
+                                  onChange={handleImageChange}
+                                  accept=".jpg, .jpeg, .png"
+                                />
                               </div>
                             </div>
                           </div>
@@ -324,19 +342,17 @@ const EventDetailsPage = () => {
                         </div>
                         <div className="col-span-4 mt-10"></div>
                         <div className="col-span-3 mt-10 flex justify-end space-x-8">
-                          <button
-                            onClick={() => {
-                              window.location.href = "/";
-                            }}
-                            type="button"
+                          <Link
+                            to="/"
                             className="inline-block w-full rounded-lg bg-red-500 px-5 py-3 font-medium text-white sm:w-auto"
                           >
                             Cancel
-                          </button>
+                          </Link>
                           <button
                             onClick={updateEvent}
                             type="submit"
-                            className="inline-block w-full rounded-lg bg-green-600 px-5 py-3 font-medium text-white sm:w-auto"
+                            disabled={disabled}
+                            className="inline-block w-full rounded-lg bg-green-600 px-5 py-3 font-medium text-white sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             Update Event
                           </button>
