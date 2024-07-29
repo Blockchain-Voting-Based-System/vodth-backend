@@ -1,12 +1,12 @@
 // import CsvUploader from "../../components/csv/CsvUploader";
 import { useState } from "react";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { eventStorage, firestore } from "../../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { EventFormType } from "../../utils/formType";
 import { NewEvent } from "../../utils/newEvent";
 import { useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const NewEventPage = () => {
   const [disabled, setDisabled] = useState(false);
@@ -19,6 +19,7 @@ const NewEventPage = () => {
     startDate: new Date(),
     endDate: new Date(),
     suiEventId: "",
+    status: "",
   });
   const [image, setImage] = useState<File>();
 
@@ -79,10 +80,19 @@ const NewEventPage = () => {
       alert("Error uploading image");
     });
     if (imageUpload?.status == true && suiEvent?.success == true) {
+      const startDateTime = new Date(formState.startDate);
+      const now = new Date();
+      const status =
+        startDateTime > now
+          ? (formState.status = "pending")
+          : (formState.status = "active");
+
       const event = {
         ...formState,
         imageUrl: imageUpload.imageUrl,
         suiEventId: suiEvent?.suiEventId,
+        status: status,
+        createdAt: Timestamp.now(),
       };
       await addDoc(eventCollection, event)
         .then((result) => {
@@ -167,7 +177,7 @@ const NewEventPage = () => {
               </div>
               <div className="col-span-3">
                 <div className="my-2 p-2 flex space-x-4">
-                  <p>Event Image</p>
+                  <p>Poll Banner</p>
                   {imagePreviewUrl && (
                     <button
                       type="button"
@@ -267,15 +277,12 @@ const NewEventPage = () => {
               </div>
               <div className="col-span-4 mt-10"></div>
               <div className="col-span-3 mt-10 flex justify-end space-x-8">
-                <button
-                  onClick={() => {
-                    window.location.href = "/events";
-                  }}
-                  type="button"
+                <Link
+                  to="/"
                   className="inline-block w-full rounded-lg bg-red-500 px-5 py-3 font-medium text-white sm:w-auto"
                 >
                   Cancel
-                </button>
+                </Link>
                 <button
                   disabled={disabled}
                   onClick={createEvent}

@@ -13,16 +13,14 @@ const CandidatesList = ({
     <section className="bg-gray-100">
       <div className="mx-auto py-6 px-1 sm:px-2 lg:px-4">
         <div className="rounded-lg bg-white shadow-lg">
-          <div className=" flex justify-between">
-            <div className="my-4 ml-8 text-2xl font-semibold">Candidate</div>
-            <button
-              onClick={() => {
-                window.location.href = `/events/${eventId}/candidates/new`;
-              }}
-              className=" bg-blue-400 h-12 rounded-md p-2 m-4"
+          <div className=" flex justify-between items-center">
+            <div className="my-4 ml-8 text-2xl font-semibold">Candidates</div>
+            <Link
+              to={`/events/${eventId}/candidates/new`}
+              className=" bg-green-600 text-white rounded-md p-3 m-4"
             >
               New Candidate
-            </button>
+            </Link>
           </div>
           <hr />
           <div className="overflow-x-auto my-2 p-4 rounded-2xl">
@@ -49,13 +47,14 @@ const CandidatesList = ({
                         <Link
                           to={`/events/${eventId}/candidates/${candidate.id}/edit`}
                           className="w-1/6 text-blue-400 overflow-x-auto"
-                          target="_blank"
                           rel="noopener noreferrer"
                         >
                           {candidate.name}
                         </Link>
                         <div className=" w-1/6 overflow-x-auto ">
-                          <span className="bg-red-500 p-1 inline-block rounded-lg">
+                          <span
+                            className={`p-1 inline-block rounded-lg ${candidate.status == "Active" ? "bg-green-600 text-white" : candidate.status == "Suspended" ? "bg-yellow-600 text-white" : "bg-red-600 text-white"}`}
+                          >
                             {candidate.status}
                           </span>
                         </div>
