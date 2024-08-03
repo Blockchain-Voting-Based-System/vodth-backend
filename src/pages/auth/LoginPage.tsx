@@ -4,7 +4,7 @@ import { generateNonce, generateRandomness } from "@mysten/zklogin";
 import { NetworkName } from "@polymedia/suits";
 import { useEffect, useRef } from "react";
 // import "./App.less";
-import Logo from "./logo.png";
+import Logo from "../../public/logo.png";
 
 /* Configuration */
 

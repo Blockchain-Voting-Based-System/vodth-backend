@@ -1,6 +1,3 @@
-import { ConnectButton } from "@mysten/dapp-kit";
-import { Box, Flex, Heading } from "@radix-ui/themes";
-import { Link } from "react-router-dom";
 
 const AppNavigation = () => {
   return (
