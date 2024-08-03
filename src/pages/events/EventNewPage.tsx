@@ -1,4 +1,3 @@
-// import CsvUploader from "../../components/csv/CsvUploader";
 import { useState } from "react";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { eventStorage, firestore } from "../../firebase";

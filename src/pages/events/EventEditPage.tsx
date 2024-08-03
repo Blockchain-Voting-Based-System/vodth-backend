@@ -1,5 +1,3 @@
-import { Stepper } from "primereact/stepper";
-import { StepperPanel } from "primereact/stepperpanel";
 import {
   DocumentData,
   Timestamp,
@@ -12,11 +10,13 @@ import {
   where,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { Stepper } from "primereact/stepper";
+import { StepperPanel } from "primereact/stepperpanel";
 import { useEffect, useRef, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import CandidatesList from "../../components/candidatesList/CandidateList";
-import { eventStorage, firestore } from "../../firebase";
 import CsvUploader from "../../components/csv/CsvUploader";
+import { eventStorage, firestore } from "../../firebase";
 import { EventFormType } from "../../utils/formType";
 import { getCandidateObjects } from "../../utils/getSuiCandidate";
 const EventDetailsPage = () => {
@@ -374,8 +374,8 @@ const EventDetailsPage = () => {
                 </StepperPanel>
                 <StepperPanel header="CSV">
                   <div className="flex flex-column h-12rem">
-                    <div className="border-2 border-dashed surface-border border-round surface-ground flex-auto align-items-center font-medium">
-                      CSV
+                    <div className="p-12 border-2 border-dashed surface-border border-round surface-ground flex-auto align-items-center font-medium">
+                    <h1 className=" text-3xl mb-10">Upload the eligible voter email as a CSV file</h1>
                       <CsvUploader
                         eventName={formState.name}
                         eventRef={eventId}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from "../auth/UserContext";
 import DefaultLayout from "../layouts/DefaultLayout";
-import Logo from "../auth/logo.png";
+import Logo from "../public/logo.png";
 import { toast, ToastContainer, ToastOptions } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

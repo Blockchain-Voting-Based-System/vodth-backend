@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   DocumentData,
   collection,
@@ -7,6 +6,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { FaRegDotCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { getEventObjects } from "../../utils/getSuiEvent";
@@ -77,7 +77,9 @@ const EventPage = () => {
               <span className="w-1/6 overflow-x-auto">Candidates</span>
               <span className="w-1/6 overflow-x-auto">Voted</span>
               <span className="w-1/6 overflow-x-auto">Start Date</span>
+              <span className="w-1/6 overflow-x-auto">End Date</span>
               <span className="w-1/6 overflow-x-auto">Status</span>
+              <span className="w-1/6 overflow-x-auto">History</span>
             </div>
             <div className="overflow-y-auto" style={{ maxHeight: "490px" }}>
               {events.map((event: any, index: any) => {
@@ -102,6 +104,9 @@ const EventPage = () => {
                       <span className="w-1/6 overflow-x-auto">
                         {formatDate(event.data().startDate)}
                       </span>
+                      <span className="w-1/6 overflow-x-auto">
+                        {formatDate(event.data().endDate)}
+                      </span>
                       <span className="w-1/6 overflow-x-auto ">
                         <span
                           className={`
@@ -112,6 +117,17 @@ const EventPage = () => {
                         >
                           {event.data().status}
                         </span>
+                      </span>
+                      <span className="w-1/6 overflow-x-auto">
+                        {new Date(event.data().endDate) < new Date() ? (
+                          <span className="block text-red-600 mt-2">
+                            History
+                          </span>
+                        ) : (
+                          <span className="block text-green-600 mt-2">
+                            Present
+                          </span>
+                        )}
                       </span>
                     </div>
                     <hr />

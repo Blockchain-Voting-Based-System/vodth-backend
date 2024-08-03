@@ -79,7 +79,7 @@ const CsvUploader: React.FC<CsvUploaderProps> = ({ eventName, eventRef }) => {
         parserOptions={{ header: true }}
         onFileLoaded={handleFileLoaded}
       />
-      <button className="bg-blue-500 px-10 py-2" onClick={handleUploadCsv}>
+      <button className="mt-10 bg-blue-500 px-10 py-2 text-white" onClick={handleUploadCsv}>
         Upload
       </button>
     </>

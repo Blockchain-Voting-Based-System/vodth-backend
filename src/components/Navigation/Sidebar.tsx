@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "./../../public/logo.jpeg";
+import logo from "./../../public/logo.png";
 import { AiFillDashboard } from "react-icons/ai";
 import { Tooltip } from "primereact/tooltip";
 import { MdEventAvailable } from "react-icons/md";
