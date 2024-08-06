@@ -161,12 +161,12 @@ const EventDetailsPage = () => {
     <section className="bg-gray-100">
       <div className="mx-auto py-6 px-1 sm:px-2 lg:px-4">
         <div className="rounded-lg bg-white shadow-lg">
-          <div className="card flex justify-content-center">
+          <div className="card flex justify-content-center p-8">
             <div style={{ width: "100%" }}>
               <Stepper ref={stepperRef}>
                 <StepperPanel header="Event Detail">
                   <div className="flex flex-column h-12rem">
-                    <div className="border-2 border-dashed surface-border border-round surface-ground flex-auto  align-items-center font-medium">
+                    <div className="flex-auto  align-items-center font-medium">
                       <div className="text-2xl font-semibold my-4 ml-8 inline-block">
                         Event Detail
                       </div>
@@ -363,7 +363,7 @@ const EventDetailsPage = () => {
                 </StepperPanel>
                 <StepperPanel header="Candidate">
                   <div className="flex flex-column h-12rem">
-                    <div className="border-2 border-dashed surface-border border-round surface-ground flex-auto  align-items-center font-medium">
+                    <div className="flex-auto  align-items-center font-medium">
                       <CandidatesList
                         eventId={eventId}
                         candidates={candidates}
@@ -374,7 +374,7 @@ const EventDetailsPage = () => {
                 </StepperPanel>
                 <StepperPanel header="CSV">
                   <div className="flex flex-column h-12rem">
-                    <div className="p-12 border-2 border-dashed surface-border border-round surface-ground flex-auto align-items-center font-medium">
+                    <div className="p-12 flex-auto align-items-center font-medium">
                     <h1 className=" text-3xl mb-10">Upload the eligible voter email as a CSV file</h1>
                       <CsvUploader
                         eventName={formState.name}

@@ -75,6 +75,7 @@ const EmailTemplate: React.FC<EmailTemplateProps> = ({
                 padding: "10px 20px",
                 borderRadius: "5px",
                 cursor: "pointer",
+                margin: "0 auto",
               }}
             >
               <span>{secretCode}</span>
