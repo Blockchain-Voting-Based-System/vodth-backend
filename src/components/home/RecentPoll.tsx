@@ -1,4 +1,4 @@
-import { RiLineChartFill, RiReactjsFill } from "react-icons/ri";
+import { RiLineChartFill } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import {
   collection,
@@ -12,9 +12,10 @@ import { firestore } from "../../firebase";
 import { Link } from "react-router-dom";
 import { getCandidateObjects } from "../../utils/getSuiCandidate";
 
-function hasFields(content: any): content is { fields: { voted: number } } {
-  return content && typeof content.fields === "object";
+function hasFields(content: any): content is { fields: { voted: boolean } } {
+  return content && typeof content === "object" && "fields" in content;
 }
+
 const formatDate = (dateString: string | undefined) => {
   if (!dateString) return "";
   const date = new Date(dateString);
@@ -61,10 +62,9 @@ const RecentPoll = () => {
     await getCandidateObjects(suiCandidateId).then((result) => {
       const suicandidatesList: any = [];
       candidates.map(async (candidate: any, index: number) => {
+        const content = result[index]?.data?.content;
         suicandidatesList.push({
-          voted: hasFields(result[index]?.data?.content)
-            ? result[index]?.data?.content.fields.voted
-            : 0,
+          voted: hasFields(content) ? content.fields.voted : 0,
           ...candidate,
         });
         suicandidatesList.sort((a: any, b: any) => b.voted - a.voted);

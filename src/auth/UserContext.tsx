@@ -12,7 +12,6 @@ import {
   GoogleAuthProvider,
   signOut,
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../firebase";
 
