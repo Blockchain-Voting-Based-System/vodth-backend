@@ -5,13 +5,23 @@ import { renderToString } from "react-dom/server";
 import { firestore } from "../../firebase";
 import { useGenerateSecret } from "../../services/useGenerateSecret";
 import EmailTemplate from "../email/EmailTemplate";
-
+import { toast, ToastContainer, ToastOptions } from "react-toastify";
 interface CsvUploaderProps {
   eventName: string;
   eventRef: any;
 }
 
 const CsvUploader: React.FC<CsvUploaderProps> = ({ eventName, eventRef }) => {
+  const toastOptions: ToastOptions = {
+    position: "bottom-right",
+    autoClose: 2000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  };
+
   const [csvData, setCsvData] = useState<any[]>([]);
 
   const handleFileLoaded = (data: any) => {
@@ -67,19 +77,23 @@ const CsvUploader: React.FC<CsvUploaderProps> = ({ eventName, eventRef }) => {
       // After the loop, update the event document with the new voterSecrets array
       await updateDoc(eventDocRef, { voterSecrets: voterSecrets });
     } catch (error) {
-      console.error("Error uploading CSV data: ", error);
+      toast.error("CSV upload fail.", toastOptions);
     }
 
-    console.log("CSV data uploaded");
+    toast.success("Secret key has been sent.", toastOptions);
   };
 
   return (
     <>
+      <ToastContainer />
       <CSVReader
         parserOptions={{ header: true }}
         onFileLoaded={handleFileLoaded}
       />
-      <button className="mt-10 bg-blue-500 px-10 py-2 text-white" onClick={handleUploadCsv}>
+      <button
+        className="mt-10 bg-blue-500 px-10 py-2 text-white"
+        onClick={handleUploadCsv}
+      >
         Upload
       </button>
     </>

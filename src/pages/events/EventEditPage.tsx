@@ -19,6 +19,7 @@ import CsvUploader from "../../components/csv/CsvUploader";
 import { eventStorage, firestore } from "../../firebase";
 import { EventFormType } from "../../utils/formType";
 import { getCandidateObjects } from "../../utils/getSuiCandidate";
+import { toast, ToastContainer, ToastOptions } from "react-toastify";
 const EventDetailsPage = () => {
   const stepperRef = useRef(null);
 
@@ -126,6 +127,32 @@ const EventDetailsPage = () => {
     return result;
   };
 
+  const toastOptions: ToastOptions = {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  };
+
+  function validateEvent(event: any): boolean {
+    return requiredAttributes.every(
+      (attr) =>
+        event[attr] !== undefined && event[attr] !== null && event[attr] !== "",
+    );
+  }
+  const requiredAttributes = [
+    "name",
+    "type",
+    "description",
+    "startDate",
+    "endDate",
+    "suiEventId",
+    "status",
+  ];
+
   const updateEvent = async (e: any) => {
     e.preventDefault();
     setDisabled(true);
@@ -149,19 +176,24 @@ const EventDetailsPage = () => {
           updatedAt: Timestamp.now(),
         };
         const docRef = doc(firestore, "events", eventId);
-        await updateDoc(docRef, event)
-          .then(() => {
-            alert("Poll updated successfully");
-          })
-          .catch(() => {
-            alert("Poll update failed");
-          });
+        if (!validateEvent(event)) {
+          toast.error("Poll update failed!", toastOptions);
+        } else {
+          await updateDoc(docRef, event)
+            .then(() => {
+              toast.success("Poll update successfully!", toastOptions);
+            })
+            .catch(() => {
+              toast.error("Poll update failed", toastOptions);
+            });
+        }
       }
     }
     setDisabled(false);
   };
   return (
     <section className="bg-gray-100">
+      <ToastContainer></ToastContainer>
       <div className="mx-auto py-6 px-1 sm:px-2 lg:px-4">
         <div className="rounded-lg bg-white shadow-lg">
           <div className="card flex justify-content-center p-8">
