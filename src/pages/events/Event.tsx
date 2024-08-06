@@ -1,8 +1,8 @@
-import React, { useRef } from "react";
-import EventNewPage from "./EventNewPage";
 import { Stepper } from "primereact/stepper";
 import { StepperPanel } from "primereact/stepperpanel";
+import { useRef } from "react";
 import CandidatesList from "../../components/candidatesList/CandidateList";
+import EventNewPage from "./EventNewPage";
 const Event = () => {
   const stepperRef = useRef(null);
 
