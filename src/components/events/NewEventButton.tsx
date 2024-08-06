@@ -32,7 +32,7 @@ export const NewEventButton = ({ account }: NewEventButtonProps) => {
             createEvent();
           }}
         >
-          Create Event
+          Create Poll
         </button>
       </div>
     </div>

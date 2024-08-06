@@ -111,7 +111,7 @@ const NewCandidatePage = () => {
         await addDoc(candidateCollections, candidate)
           .then((candidate) => {
             alert("Candidate created successfully");
-            window.location.href = `/events/${eventId}/candidates/${candidate.id}/edit`;
+            window.location.href = `/polls/${eventId}/candidates/${candidate.id}/edit`;
           })
           .catch(() => {
             alert("Error creating event");
@@ -364,7 +364,7 @@ const NewCandidatePage = () => {
               </div>
               <div className="mt-4 flex justify-end col-span-5 space-x-4">
                 <button
-                  onClick={() => navigate(`/events/${eventId}/candidates`)}
+                  onClick={() => navigate(`/polls/${eventId}/candidates`)}
                   type="button"
                   className="inline-block w-full rounded-lg bg-red-500 px-5 py-3 font-medium text-white sm:w-auto"
                 >

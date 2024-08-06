@@ -38,14 +38,14 @@ const Sidebar: React.FC = () => {
                 <span className="ml-2">Dashboard</span>
               </li>
             </Link>
-            <Link to="/events/new">
+            <Link to="/polls/new">
               <li
                 className={`p-4 flex items-center cursor-pointer ${
-                  activeItem === "Event"
+                  activeItem === "Poll"
                     ? "bg-gray-200"
                     : "text-gray-700 hover:bg-gray-200"
                 }`}
-                onClick={() => handleItemClick("Event")}
+                onClick={() => handleItemClick("Poll")}
               >
                 <div id="createpoll-tooltip" className="flex items-center">
                   <MdEventAvailable />

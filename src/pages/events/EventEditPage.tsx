@@ -133,11 +133,14 @@ const EventDetailsPage = () => {
       const imageUpload = await uploadImage();
       if (imageUpload.status == true) {
         const startDateTime = new Date(formState.startDate);
+        const endDateTime = new Date(formState.endDate);
         const now = new Date();
         const status =
-          startDateTime > now
-            ? (formState.status = "pending")
-            : (formState.status = "active");
+          endDateTime < now
+            ? (formState.status = "ended")
+            : startDateTime > now
+              ? (formState.status = "pending")
+              : (formState.status = "active");
 
         const event = {
           ...formState,
@@ -148,10 +151,10 @@ const EventDetailsPage = () => {
         const docRef = doc(firestore, "events", eventId);
         await updateDoc(docRef, event)
           .then(() => {
-            alert("Event updated successfully");
+            alert("Poll updated successfully");
           })
           .catch(() => {
-            alert("Event update failed");
+            alert("Poll update failed");
           });
       }
     }
@@ -164,7 +167,7 @@ const EventDetailsPage = () => {
           <div className="card flex justify-content-center p-8">
             <div style={{ width: "100%" }}>
               <Stepper ref={stepperRef}>
-                <StepperPanel header="Event Detail">
+                <StepperPanel header="Poll Detail">
                   <div className="flex flex-column h-12rem">
                     <div className="flex-auto  align-items-center font-medium">
                       <div className="text-2xl font-semibold my-4 ml-8 inline-block">
@@ -375,7 +378,9 @@ const EventDetailsPage = () => {
                 <StepperPanel header="CSV">
                   <div className="flex flex-column h-12rem">
                     <div className="p-12 flex-auto align-items-center font-medium">
-                    <h1 className=" text-3xl mb-10">Upload the eligible voter email as a CSV file</h1>
+                      <h1 className=" text-3xl mb-10">
+                        Upload the eligible voter email as a CSV file
+                      </h1>
                       <CsvUploader
                         eventName={formState.name}
                         eventRef={eventId}

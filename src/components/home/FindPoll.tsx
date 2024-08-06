@@ -13,7 +13,7 @@ const FindPoll = () => {
         <button className="bg-violet-600 p-2 rounded-md text-white text-md font-bold w-28">
           Find Poll
         </button>
-        <Link to="/events/new">
+        <Link to="/polls/new">
           <button className="bg-green-600 p-2 rounded-md text-white text-md font-bold w-28">
             New Poll
           </button>

@@ -10,7 +10,7 @@ const Event = () => {
     <div className="card flex justify-content-center ">
       <div style={{ width: "100%" }}>
         <Stepper ref={stepperRef}>
-          <StepperPanel header="Event">
+          <StepperPanel header="Poll">
             <div className="flex flex-column h-12rem">
               <div className="border-2 border-dashed surface-border border-round surface-ground flex-auto  align-items-center font-medium">
                 <EventNewPage />
