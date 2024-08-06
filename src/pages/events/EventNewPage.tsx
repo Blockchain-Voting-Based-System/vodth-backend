@@ -6,6 +6,7 @@ import { EventFormType } from "../../utils/formType";
 import { NewEvent } from "../../utils/newEvent";
 import { useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { toast, ToastContainer, ToastOptions } from "react-toastify";
 
 const NewEventPage = () => {
   const [disabled, setDisabled] = useState(false);
@@ -21,6 +22,16 @@ const NewEventPage = () => {
     status: "",
   });
   const [image, setImage] = useState<File>();
+
+  const toastOptions: ToastOptions = {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  };
 
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
 
@@ -67,6 +78,22 @@ const NewEventPage = () => {
     return result;
   };
 
+  function validateEvent(event: any): boolean {
+    return requiredAttributes.every(
+      (attr) =>
+        event[attr] !== undefined && event[attr] !== null && event[attr] !== "",
+    );
+  }
+  const requiredAttributes = [
+    "name",
+    "type",
+    "description",
+    "startDate",
+    "endDate",
+    "suiEventId",
+    "status",
+  ];
+
   const createEvent = async (e: any): Promise<void> => {
     setDisabled(true);
     e.preventDefault();
@@ -93,14 +120,19 @@ const NewEventPage = () => {
         status: status,
         createdAt: Timestamp.now(),
       };
-      await addDoc(eventCollection, event)
-        .then((result) => {
-          navigate(`/polls/${result?.id}`, { replace: true });
-          console.log("Poll created successfully");
-        })
-        .catch(() => {
-          alert("Error creating poll");
-        });
+
+      if (!validateEvent(event)) {
+        toast.error("Poll create failed!", toastOptions);
+      } else {
+        await addDoc(eventCollection, event)
+          .then((result) => {
+            toast.success("Poll created successfully!", toastOptions);
+            navigate(`/polls/${result?.id}`, { replace: true });
+          })
+          .catch(() => {
+            toast.error("Poll create failed!", toastOptions);
+          });
+      }
     }
     setDisabled(false);
   };
@@ -108,6 +140,7 @@ const NewEventPage = () => {
   return (
     <div>
       <section className="bg-gray-100">
+        <ToastContainer />
         <div className="mx-auto py-6 px-1 sm:px-2 lg:px-4">
           <div className="rounded-lg bg-white shadow-lg">
             <div className="text-2xl font-semibold my-4 ml-8 inline-block">
