@@ -69,7 +69,7 @@ const EventPage = () => {
           </span>
         </div>
         <hr />
-        <div className="overflow-x-auto my-2">
+        <div className="overflow-x-auto my-2 text-center">
           <div className="">
             <div className="flex justify-around bg-gray-100 p-4 rounded-2xl my-4">
               <span className="w-1/6 overflow-x-auto">Poll Name</span>
@@ -79,15 +79,17 @@ const EventPage = () => {
               <span className="w-1/6 overflow-x-auto">Start Date</span>
               <span className="w-1/6 overflow-x-auto">End Date</span>
               <span className="w-1/6 overflow-x-auto">Status</span>
-              <span className="w-1/6 overflow-x-auto">History</span>
             </div>
-            <div className="overflow-y-auto" style={{ maxHeight: "490px" }}>
+            <div
+              className="overflow-y-auto text-center"
+              style={{ maxHeight: "490px" }}
+            >
               {events.map((event: any, index: any) => {
                 return (
                   <div className="my-4" key={index}>
                     <div className="flex justify-around p-4 my-2">
                       <Link
-                        to={`/events/${event.id}`}
+                        to={`/polls/${event.id}`}
                         className="w-1/6 text-blue-400 overflow-x-auto"
                       >
                         {event.data().name}
@@ -110,24 +112,13 @@ const EventPage = () => {
                       <span className="w-1/6 overflow-x-auto ">
                         <span
                           className={`
-                        ${event.data().status == "active" ? "bg-green-600" : "bg-yellow-600"}
+                            ${event.data().status == "ended" ? "bg-red-600" : event.data().status == "active" ? "bg-green-600" : "bg-yellow-600"}
                         text-white
                         p-2 inline-block rounded-lg
                       `}
                         >
                           {event.data().status}
                         </span>
-                      </span>
-                      <span className="w-1/6 overflow-x-auto">
-                        {new Date(event.data().endDate) < new Date() ? (
-                          <span className="block text-red-600 mt-2">
-                            History
-                          </span>
-                        ) : (
-                          <span className="block text-green-600 mt-2">
-                            Present
-                          </span>
-                        )}
                       </span>
                     </div>
                     <hr />

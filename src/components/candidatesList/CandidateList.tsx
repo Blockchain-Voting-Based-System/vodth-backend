@@ -16,7 +16,7 @@ const CandidatesList = ({
           <div className=" flex justify-between items-center">
             <div className="my-4 ml-8 text-2xl font-semibold">Candidates</div>
             <Link
-              to={`/events/${eventId}/candidates/new`}
+              to={`/polls/${eventId}/candidates/new`}
               className=" bg-green-600 text-white rounded-md p-3 m-4"
             >
               New Candidate
@@ -45,7 +45,7 @@ const CandidatesList = ({
                           ></img>
                         </div>
                         <Link
-                          to={`/events/${eventId}/candidates/${candidate.id}/edit`}
+                          to={`/polls/${eventId}/candidates/${candidate.id}/edit`}
                           className="w-1/6 text-blue-400 overflow-x-auto"
                           rel="noopener noreferrer"
                         >

@@ -15,11 +15,15 @@ const EventStepper: React.FC<EventStepperProps> = ({ eventId, candidates }) => {
     <div className="card flex justify-content-center">
       <div style={{ width: "100%" }}>
         <Stepper ref={stepperRef}>
-          <StepperPanel header="Event Detail"></StepperPanel>
+          <StepperPanel header="Poll Detail"></StepperPanel>
           <StepperPanel header="Candidate">
             <div className="flex flex-column h-12rem">
               <div className="border-2 border-dashed surface-border border-round surface-ground flex-auto  align-items-center font-medium">
-                <CandidatesList eventId={eventId} candidates={candidates} />
+                <CandidatesList
+                  eventId={eventId}
+                  candidates={candidates}
+                  suiCandidates={undefined}
+                />
               </div>
             </div>
           </StepperPanel>

@@ -10,12 +10,10 @@ const PollStatus = () => {
 
   useEffect(() => {
     const fetchEvents = async () => {
-      const now = new Date();
-
       // Query for completed events
       const completedQuery = query(
         collection(firestore, "events"),
-        where("endDateTime", "<", now),
+        where("status", "==", "ended"),
       );
       const completedSnapshot = await getDocs(completedQuery);
       setCompletedCount(completedSnapshot.size);
@@ -50,8 +48,8 @@ const PollStatus = () => {
         </div>
         <div className="flex space-x-4 mt-10">
           <div>
-            <div className=" text-3xl text-violet-600">{completedCount}</div>
-            <div>completed</div>
+            <div className=" text-3xl text-red-600">{completedCount}</div>
+            <div>Ended</div>
           </div>
           <div>
             <div className=" text-3xl text-green-600">{activeCount}</div>

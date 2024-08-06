@@ -15,17 +15,15 @@ import { getCandidateObjects } from "../../utils/getSuiCandidate";
 function hasFields(content: any): content is { fields: { voted: number } } {
   return content && typeof content.fields === "object";
 }
-const formatDate = (dateString: string) => {
-  const dateOptions: Intl.DateTimeFormatOptions = {
-    month: "long",
-    day: "numeric",
-  };
-  const timeOptions: Intl.DateTimeFormatOptions = {
-    hour: "2-digit",
-    minute: "2-digit",
-  };
+const formatDate = (dateString: string | undefined) => {
+  if (!dateString) return "";
   const date = new Date(dateString);
-  return `${date.toLocaleDateString(undefined, dateOptions)} ${date.toLocaleTimeString(undefined, timeOptions)}`;
+  const options: Intl.DateTimeFormatOptions = {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  };
+  return date.toLocaleDateString("en-US", options);
 };
 const RecentPoll = () => {
   const [recentPoll, setRecentPoll] = useState<any>();
@@ -80,7 +78,7 @@ const RecentPoll = () => {
         <div className="flex items-center justify-between space-x-2">
           <span className="">
             <div className="font-bold text-xl">Recent Poll</div>
-            <Link to={`/events/${recentPoll?.id}`}>
+            <Link to={`/polls/${recentPoll?.id}`}>
               <div className="text-lg font-semibold text-blue-400">
                 {recentPoll?.name}
               </div>

@@ -22,25 +22,25 @@ const router = createBrowserRouter(
       <Route path="/signin" element={<SignIn />} />
       <Route path="/" element={<ProtectedRoute element={DefaultLayout} />}>
         <Route index element={<ProtectedRoute element={HomePage} />} />
-        <Route path="events" element={<ProtectedRoute element={EventPage} />} />
+        <Route path="polls" element={<ProtectedRoute element={EventPage} />} />
         <Route
-          path="events/new"
+          path="polls/new"
           element={<ProtectedRoute element={NewEventPage} />}
         />
         <Route
-          path="events/:eventId"
+          path="polls/:eventId"
           element={<ProtectedRoute element={EventDetailsPage} />}
         />
         <Route
-          path="events/:eventId/candidates"
+          path="polls/:eventId/candidates"
           element={<ProtectedRoute element={CandidatesList} />}
         />
         <Route
-          path="events/:eventId/candidates/new"
+          path="polls/:eventId/candidates/new"
           element={<ProtectedRoute element={NewCandidate} />}
         />
         <Route
-          path="events/:eventId/candidates/:candidateId/edit"
+          path="polls/:eventId/candidates/:candidateId/edit"
           element={<ProtectedRoute element={EditCandidatePage} />}
         />
       </Route>

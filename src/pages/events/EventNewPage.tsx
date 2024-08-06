@@ -16,7 +16,7 @@ const NewEventPage = () => {
     type: "",
     description: "",
     startDate: new Date(),
-    endDate: new Date(),
+    endDate: new Date(), // Provide the required arguments for the Timestamp constructor
     suiEventId: "",
     status: "",
   });
@@ -95,11 +95,11 @@ const NewEventPage = () => {
       };
       await addDoc(eventCollection, event)
         .then((result) => {
-          navigate(`/events/${result?.id}`, { replace: true });
-          console.log("Event created successfully");
+          navigate(`/polls/${result?.id}`, { replace: true });
+          console.log("Poll created successfully");
         })
         .catch(() => {
-          alert("Error creating event");
+          alert("Error creating poll");
         });
     }
     setDisabled(false);
@@ -111,7 +111,7 @@ const NewEventPage = () => {
         <div className="mx-auto py-6 px-1 sm:px-2 lg:px-4">
           <div className="rounded-lg bg-white shadow-lg">
             <div className="text-2xl font-semibold my-4 ml-8 inline-block">
-              Create Events
+              Create Poll
             </div>
             <hr />
             <form className="grid grid-cols-7 space-x-4 px-8 pt-4 pb-8">
@@ -288,7 +288,7 @@ const NewEventPage = () => {
                   type="submit"
                   className="inline-block w-full rounded-lg bg-green-600 px-5 py-3 font-medium text-white sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Create Event
+                  Create Poll
                 </button>
               </div>
             </form>
